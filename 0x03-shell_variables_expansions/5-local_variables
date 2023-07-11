@@ -1,3 +1,2 @@
 #!/bin/bash
-(set | grep -v '^_' | cut -d '=' -f 1; env | cut -d '=' -f 1)
-
+echo "Local variables:" set | grep -v '^_' | cut -d '=' -f 1 echo "Environment variables:" env | cut -d '=' -f 1
