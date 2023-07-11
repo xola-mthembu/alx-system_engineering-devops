@@ -1,2 +1,2 @@
 #!/bin/bash
-echo "Number of directories in the PATH: $(IFS=":"; set -- $PATH; echo $#)"
+echo "Number of directories in the PATH: $(grep -c ':' <<< "$PATH")"
