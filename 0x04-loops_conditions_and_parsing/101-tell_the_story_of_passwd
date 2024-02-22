@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Script to tell the story of each user in /etc/passwd
 
 # Setting the Internal Field Separator (IFS) to colon (:)
