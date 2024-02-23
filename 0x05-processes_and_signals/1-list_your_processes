@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# This script displays a list of currently running processes.
+# This script displays a list of currently running processes with hierarchy.
 
 # Display the header
 printf "%-9s %-5s %-5s %-5s %-5s %-5s %-10s %-5s %-5s %-s\n" "USER" "PID" "%CPU" "%MEM" "VSZ" "RSS" "TTY" "STAT" "START" "TIME"
 
-# Use ps command to get the processes, exclude header line, and format the output
-ps -eo user,pid,%cpu,%mem,vsz,rss,tty,stat,start,time,comm --sort=-%cpu | sed 1d
+# Use ps command to get the processes with hierarchy, exclude header line, and format the output
+ps axo user,pid,%cpu,%mem,vsz,rss,tty,stat,start,time,comm --sort=-%cpu | awk 'NR==1 {print $0} NR>1 {gsub(/^ */,"",$0); split($0,a); printf "%-9s %-5s %-5s %-5s %-5s %-5s %-10s %-5s %-5s %-s\n", a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9], a[10]}'
