@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# This script displays a list of currently running processes.
+
+# Display the header
+printf "%-9s %-5s %-5s %-5s %-5s %-5s %-10s %-5s %-5s %-s\n" "USER" "PID" "%CPU" "%MEM" "VSZ" "RSS" "TTY" "STAT" "START" "TIME"
+
+# Use ps command to get the processes, exclude header line, and format the output
+ps -eo user,pid,%cpu,%mem,vsz,rss,tty,stat,start,time,comm --sort=-%cpu | sed 1d
