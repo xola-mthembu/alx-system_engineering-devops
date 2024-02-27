@@ -1,3 +1,4 @@
 #!/usr/bin/env ruby
-# This script matches strings that start with 'h', followed by one or more 't's, and end with 'n'
-puts ARGV[0].scan(/ht+n/).join
+# This script accepts one argument and passes it to a regex matching method
+
+puts ARGV[0].scan(/hbt+n/).join
