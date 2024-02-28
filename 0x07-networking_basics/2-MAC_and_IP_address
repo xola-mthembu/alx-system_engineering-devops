@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# This script provides answers to questions about MAC and IP addresses
+
+# Answer for the MAC address question
+echo "2" # The unique identifier of a network interface
+
+# Answer for the IP address question
+echo "1" # Is to devices connected to a network what postal address is to houses
