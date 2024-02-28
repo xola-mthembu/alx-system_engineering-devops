@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# This file contains answers to the types of network questions
+
+# Answers
+echo "3" # LAN
+echo "2" # WAN
+echo "1" # Internet
