@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# This script displays listening ports along with the PID and name of the program to which each socket belongs
+
+# Using netstat command to display listening ports with the PID and program names
+# The '-l' option stands for "listening" and '-tunlp' options specify TCP/UDP, numeric addresses, listening ports, and process information
+netstat -tunlp
