@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
-# This file contains answers to the OSI model questions
+# This script outputs the correct answers to questions about the OSI model
 
-2
-2
+# Output the answer to the question: What is the OSI model?
+echo "2" # The OSI model is a conceptual framework used to understand network interactions.
+
+# Output the answer to the question: How is the OSI model organized?
+echo "2" # The OSI model is organized from the lowest level to the highest level.
