@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# This script provides answers to questions about UDP and TCP
+
+# Answer for the TCP box question
+echo "1" # It is a protocol that is transferring data in a slow way but surely
+
+# Answer for the UDP box question
+echo "2" # It is a protocol that is transferring data in a fast way and might lose data along in the process
+
+# Answer for the TCP worker question
+echo "1" # Have you received boxes x, y, z?
