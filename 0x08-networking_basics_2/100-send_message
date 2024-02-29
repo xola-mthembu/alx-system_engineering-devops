@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Connect to listener
+
+echo "Hello world" | nc localhost 98
