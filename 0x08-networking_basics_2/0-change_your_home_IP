@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# This script changes the IP address for localhost and facebook.com
+
+# Backup original hosts file
+cp /etc/hosts /etc/hosts.bak
+
+# Change localhost IP to 127.0.0.2
+sed -i 's/127.0.0.1/127.0.0.2/g' /etc/hosts
+
+# Change facebook.com IP to 8.8.8.8
+sed -i 's/157.240.11.35/8.8.8.8/g' /etc/hosts
