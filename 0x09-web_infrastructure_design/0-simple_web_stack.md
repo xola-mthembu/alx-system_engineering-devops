@@ -1,6 +1,6 @@
 # Simple Web Stack
 
-![Simple Web Stack Diagram](0-simple_web_stack.PNG)
+![Simple Web Stack Diagram](https://raw.githubusercontent.com/xola-mthembu/alx-system_engineering-devops/main/0x09-web_infrastructure_design/0-simple_web_stack.png "Simple Web Stack")
 
 ## Components:
 - Server: A physical or virtual machine that hosts the web server, application server, and database.
