@@ -1,6 +1,6 @@
 # Simple Web Stack
 
-![Simple Web Stack Diagram](https://imgbox.com/c8J6H8NO)
+![Simple Web Stack Diagram](0-simple_web_stack.PNG)
 
 ## Components:
 - Server: A physical or virtual machine that hosts the web server, application server, and database.
