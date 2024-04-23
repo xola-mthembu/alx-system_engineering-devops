@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# This script is used to start Apache and serve the "Hello Holberton" page
+
+# Start Apache2 service
+service apache2 start
+
+# Create the HTML content
+echo '<html><head><title>Hello</title></head><body><h1>Hello Holberton</h1></body></html>' > /var/www/html/index.html
+
+# Restart Apache to ensure the new content is served
+service apache2 restart
