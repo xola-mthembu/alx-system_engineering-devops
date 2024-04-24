@@ -1,15 +1,23 @@
 #!/usr/bin/env bash
 # Script to install and configure Nginx to serve a custom HTML page
 
+# Update package list
+apt-get update -y
+
 # Install Nginx
-apt-get update
 apt-get install -y nginx
+
+# Start Nginx service
+service nginx start
+
+# Enable Nginx to start automatically on boot
+update-rc.d nginx defaults
+
+# Create the /var/www/html directory
+mkdir -p /var/www/html
 
 # Configure Nginx to serve a custom HTML page
 echo "Hello World!" > /var/www/html/index.html
-
-# Since we can't use systemctl, use service command to restart Nginx
-service nginx restart
 
 # Disable default site to ensure Nginx serves our page
 unlink /etc/nginx/sites-enabled/default
