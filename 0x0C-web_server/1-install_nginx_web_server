@@ -1,23 +1,29 @@
 #!/usr/bin/env bash
-# Script to install and configure Nginx to serve a custom HTML page
 
-# Update package list
-apt-get update -y
+# Install and configure Nginx
 
-# Install Nginx
-apt-get install -y nginx
+echo "Updating and installing Nginx..."
+sudo apt-get update -y -qq && sudo apt-get install nginx -y
+
+echo "Setting up Nginx..."
 
 # Start Nginx service
-service nginx start
+sudo service nginx start
 
-# Enable Nginx to start automatically on boot
-update-rc.d nginx defaults
+# Allow Nginx on firewall
+sudo ufw allow 'Nginx HTTP'
 
-# Create the /var/www/html directory
-mkdir -p /var/www/html
+# Configure website files
+sudo chown -R "$USER":"$USER" /var/www/html
+sudo chmod -R 755 /var/www
 
-# Configure Nginx to serve a custom HTML page
-echo "Hello World!" > /var/www/html/index.html
+# Backup default index
+sudo cp /var/www/html/index.nginx-debian.html /var/www/html/index.nginx-debian.html.bckp
 
-# Disable default site to ensure Nginx serves our page
-unlink /etc/nginx/sites-enabled/default
+# Create new index
+echo "Hello World!" | sudo dd status=none of=/var/www/html/index.nginx-debian.html
+
+# Restart Nginx
+sudo service nginx restart
+
+echo "Completed."
