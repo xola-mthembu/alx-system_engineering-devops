@@ -1,23 +1,23 @@
 #!/usr/bin/env bash
+# Script to install and configure Nginx to serve a custom HTML page
 
-# Install and configure Nginx
+# Exit on any error to prevent unexpected behavior
+set -e
 
-# Update package lists and install Nginx
-sudo apt-get update && sudo apt-get install -y nginx
+# Update the package list and install Nginx
+apt-get update
+apt-get install -y nginx
 
-# Create document root directory and index.html file
-sudo mkdir -p /etc/nginx/html
-sudo touch /etc/nginx/html/index.html
-sudo echo "Hello World!" > /etc/nginx/html/index.html
+# Ensure the Nginx document root exists and set the custom HTML page
+echo "Hello World!" > /var/www/html/index.html
 
-# Configure Nginx to listen on port 80 and serve files from the document root
-sudo printf %s "server {
-    listen 80;
-    listen [::]:80 default_server;
-    root /etc/nginx/html;
-    index index.html index.htm;
-}
-" > /etc/nginx/sites-available/default
+# Disable the default site to ensure Nginx serves your custom page
+if [ -L /etc/nginx/sites-enabled/default ]; then
+    unlink /etc/nginx/sites-enabled/default
+fi
 
-# Restart Nginx to apply the configuration changes
-sudo service nginx restart
+# Reload (not restart) Nginx to apply minimal downtime changes
+service nginx reload
+
+# Ensure Nginx is enabled to start on boot
+update-rc.d nginx defaults
