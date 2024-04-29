@@ -1,0 +1,27 @@
+root@0907f80c72ed:~/alx-system_engineering-devops/0x0C-web_server# cat 1-install_nginx_web_server
+#!/usr/bin/env bash
+# Script to install and configure Nginx to serve a custom HTML page
+
+# Update package list
+apt-get update -y
+
+# Install Nginx
+apt-get install -y nginx
+
+# Check if Nginx is installed
+if [ -x "$(command -v nginx)" ]; then
+  # Start Nginx
+  nginx
+
+  # Enable Nginx to start automatically on boot
+  update-rc.d nginx defaults
+
+  # Create the /var/www/html directory
+  mkdir -p /var/www/html
+
+  # Configure Nginx to serve a custom HTML page
+  echo "Hello World!" > /var/www/html/index.html
+
+  # Disable default site to ensure Nginx serves our page
+  unlink /etc/nginx/sites-enabled/default
+fi
