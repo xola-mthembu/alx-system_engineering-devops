@@ -1,34 +1,30 @@
-# Puppet manifest to automate adding a custom HTTP header in Nginx.
+# Puppet manifest to automate the addition of a custom HTTP header in Nginx.
 
-# Ensure the system is updated before installing Nginx.
-exec { 'system_update':
+# Update system packages before installing Nginx.
+exec { 'update_system_packages':
   provider => shell,
   command  => 'apt-get -y update',
-  path     => ['/bin', '/usr/bin'],
   before   => Package['nginx'],
 }
 
-# Install the Nginx package if it's not already installed.
+# Ensure Nginx is installed.
 package { 'nginx':
   ensure  => installed,
-  require => Exec['system_update'],
+  require => Exec['update_system_packages'],
 }
 
-# Ensure a custom HTTP header is added to the Nginx config.
-file_line { 'add_custom_header':
+# Add a custom HTTP header to the Nginx configuration file.
+file_line { 'insert_custom_header':
   ensure  => present,
   path    => '/etc/nginx/sites-available/default',
-  line    => "\tadd_header X-Served-By \"${facts['networking']['hostname']}\";",
-  match   => '^\\tadd_header X-Served-By',
+  line    => "\tadd_header X-Served-By \"${hostname}\";",
   after   => 'server_name _;',
   require => Package['nginx'],
   notify  => Service['nginx'],
 }
 
-# Ensure the Nginx service is running and enabled.
+# Ensure the Nginx service is running.
 service { 'nginx':
-  ensure    => running,
-  enable    => true,
-  require   => Package['nginx'],
-  subscribe => File_line['add_custom_header'],
+  ensure  => running,
+  require => Package['nginx'],
 }
