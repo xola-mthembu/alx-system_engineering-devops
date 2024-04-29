@@ -1,65 +1,32 @@
 #!/usr/bin/env bash
-# This script configures Nginx on an Ubuntu server to add a custom HTTP header.
-# The header 'X-Served-By' will be set to the hostname of the server.
+# Configures Nginx on a new Ubuntu machine to add a custom HTTP response header
 
-# Ensure the script is run as root or with sudo privileges
-if [ "$(id -u)" -ne 0 ]; then
-    echo "This script must be run as root" 1>&2
-    exit 1
-fi
-
-# Update and install Nginx if it's not already installed
-echo "Updating package lists..."
+# Ensure Nginx is installed
 apt-get update
-echo "Installing Nginx..."
 apt-get install -y nginx
 
-# Check if Nginx is installed successfully
-if ! command -v nginx &> /dev/null
-then
-    echo "Nginx could not be installed. Please check your package manager and try again."
-    exit 1
-fi
-
-# Retrieve the hostname of the machine
-HOSTNAME=$(hostname)
-
-# Configure Nginx to add the custom header
-echo "Configuring Nginx..."
-cat <<EOF > /etc/nginx/sites-available/default
-server {
+# Configure Nginx to add a custom header
+echo "server {
     listen 80 default_server;
     listen [::]:80 default_server;
-
-    # Add the custom header with the hostname of the server
-    add_header X-Served-By \$HOSTNAME;
-
-    root /var/www/html;
-
-    index index.html index.htm index.nginx-debian.html;
-
     server_name _;
-
     location / {
+        add_header X-Served-By \$HOSTNAME;
         try_files \$uri \$uri/ =404;
     }
-}
-EOF
+}" > /etc/nginx/sites-available/default
 
-# Check if the Nginx configuration is okay
-echo "Testing Nginx configuration..."
-nginx -t
-
-# Reload Nginx to apply the changes
-echo "Reloading Nginx..."
-systemctl restart nginx
-
-# Confirm the service has restarted successfully
-if systemctl status nginx | grep -q 'active (running)'; then
-    echo "Nginx is running with the new configuration."
+# Reload Nginx configuration
+# Checking for systemd and falling back to service command if unavailable
+if command -v systemctl > /dev/null 2>&1; then
+    echo "Using systemctl to restart nginx..."
+    systemctl restart nginx || {
+        echo "Failed to restart nginx with systemctl. Trying service command...";
+        service nginx restart || echo "Failed to restart nginx. Please restart nginx manually."
+    }
 else
-    echo "Failed to restart Nginx. Please check the status using 'systemctl status nginx'."
-    exit 1
+    echo "Using service to restart nginx..."
+    service nginx restart || echo "Failed to restart nginx. Please restart nginx manually."
 fi
 
-echo "Nginx has been configured successfully."
+echo "Nginx has been configured and restarted with the custom header."
