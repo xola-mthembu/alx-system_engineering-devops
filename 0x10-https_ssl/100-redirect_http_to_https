@@ -1,0 +1,6 @@
+# HTTP to HTTPS redirection configuration
+frontend www-http
+    bind *:80
+    acl letsencrypt-acl path_beg /.well-known/acme-challenge/
+    use_backend letsencrypt-backend if letsencrypt-acl
+    redirect scheme https code 301 if !{ ssl_fc } !letsencrypt-acl
