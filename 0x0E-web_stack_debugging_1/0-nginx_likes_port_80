@@ -5,11 +5,24 @@
 apt-get update
 apt-get install -y nginx
 
-# Ensure Nginx is running
-service nginx start
+# Make sure Nginx is enabled to start on boot and is running
+systemctl enable nginx
+systemctl start nginx
 
-# Remove default configuration and set up listening on all active IPs on port 80
-sed -i '/listen 80 default_server;/c\listen 80;' /etc/nginx/sites-available/default
+# Backup the original configuration file
+cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
 
-# Restart Nginx to apply changes
-service nginx restart
+# Configure Nginx to listen on all IPs at port 80
+echo "server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+    server_name _;
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+}" > /etc/nginx/sites-available/default
+
+# Restart Nginx to apply the new configuration
+systemctl restart nginx
