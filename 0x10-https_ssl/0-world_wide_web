@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# This script displays information about subdomains.
+
+# Function to fetch and display DNS information
+function fetch_dns_info() {
+    local domain=$1
+    local subdomain=$2
+    local record
+
+    record=$(dig +short "$subdomain.$domain" A)
+    echo "The subdomain $subdomain is a A record and points to $record"
+}
+
+# Main execution
+if [ "$#" -eq 1 ]; then
+    # Display info for main subdomains
+    for sub in www lb-01 web-01 web-02; do
+        fetch_dns_info "$1" "$sub"
+    done
+elif [ "$#" -eq 2 ]; then
+    # Display info for specified subdomain
+    fetch_dns_info "$1" "$2"
+else
+    echo "Usage: $0 <domain> [subdomain]"
+fi
