@@ -1,0 +1,15 @@
+#!/bin/bash
+# Ensures that Nginx is installed and configured to listen on port 80
+
+# Update and install Nginx if it's not already installed
+apt-get update
+apt-get install -y nginx
+
+# Ensure Nginx is running
+service nginx start
+
+# Remove default configuration and set up listening on all active IPs on port 80
+sed -i '/listen 80 default_server;/c\listen 80;' /etc/nginx/sites-available/default
+
+# Restart Nginx to apply changes
+service nginx restart
