@@ -1,25 +1,28 @@
 #!/usr/bin/env bash
-# This script displays information about subdomains.
+# Displays DNS information about specific subdomains.
 
-# Function to fetch and display DNS information
-function fetch_dns_info() {
+# Function to fetch DNS info
+get_dns_info() {
     local domain=$1
     local subdomain=$2
-    local record
-
-    record=$(dig +short "$subdomain.$domain" A)
-    echo "The subdomain $subdomain is a A record and points to $record"
+    local result=$(dig +noall +answer "$subdomain.$domain" A | awk '{print $1, $4, $5}')
+    if [[ -z "$result" ]]; then
+        echo "The subdomain $subdomain does not have an A record."
+    else
+        echo "The subdomain $subdomain is a A record and points to $(echo $result | awk '{print $3}')"
+    fi
 }
 
 # Main execution
 if [ "$#" -eq 1 ]; then
-    # Display info for main subdomains
+    # List default subdomains if only domain is provided
     for sub in www lb-01 web-01 web-02; do
-        fetch_dns_info "$1" "$sub"
+        get_dns_info "$1" "$sub"
     done
 elif [ "$#" -eq 2 ]; then
-    # Display info for specified subdomain
-    fetch_dns_info "$1" "$2"
+    # If subdomain is also provided, show info for it
+    get_dns_info "$1" "$2"
 else
     echo "Usage: $0 <domain> [subdomain]"
+    exit 1
 fi
