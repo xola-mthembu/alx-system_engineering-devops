@@ -1,28 +1,35 @@
 #!/usr/bin/env bash
-# Displays DNS information about specific subdomains.
 
-# Function to fetch DNS info
-get_dns_info() {
-    local domain=$1
-    local subdomain=$2
-    local result=$(dig +noall +answer "$subdomain.$domain" A | awk '{print $1, $4, $5}')
-    if [[ -z "$result" ]]; then
-        echo "The subdomain $subdomain does not have an A record."
-    else
-        echo "The subdomain $subdomain is a A record and points to $(echo $result | awk '{print $3}')"
-    fi
+# Check if the domain argument is provided
+if [[ $# -eq 0 ]]; then
+  echo "Please provide a domain name as an argument."
+  exit 1
+fi
+
+# Assign the domain and subdomain arguments
+domain=$1
+subdomain=$2
+
+# Function to display subdomain information
+display_subdomain_info() {
+  local subdomain=$1
+  local record_type
+  local destination
+
+  # Get the record type and destination using dig command
+  record_type=$(dig "$subdomain.$domain" | awk '/ANSWER SECTION:/{getline; print $4}')
+  destination=$(dig "$subdomain.$domain" | awk '/ANSWER SECTION:/{getline; print $5}')
+
+  echo "The subdomain $subdomain is a $record_type record and points to $destination"
 }
 
-# Main execution
-if [ "$#" -eq 1 ]; then
-    # List default subdomains if only domain is provided
-    for sub in www lb-01 web-01 web-02; do
-        get_dns_info "$1" "$sub"
-    done
-elif [ "$#" -eq 2 ]; then
-    # If subdomain is also provided, show info for it
-    get_dns_info "$1" "$2"
+# Check if subdomain argument is provided
+if [[ -z $subdomain ]]; then
+  # Display information for default subdomains
+  for sub in "www" "lb-01" "web-01" "web-02"; do
+    display_subdomain_info "$sub"
+  done
 else
-    echo "Usage: $0 <domain> [subdomain]"
-    exit 1
+  # Display information for the specified subdomain
+  display_subdomain_info "$subdomain"
 fi
