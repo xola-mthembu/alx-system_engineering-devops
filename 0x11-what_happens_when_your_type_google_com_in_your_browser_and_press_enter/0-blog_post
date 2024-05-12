@@ -1,0 +1,31 @@
+Title: Typing ‘google.com’: A Behind-the-Scenes Look at Your Internet Search
+
+
+Every day, millions hit ‘Enter’ after typing ‘google.com’ into their browsers, expecting instant results. But what exactly happens between that press and the Google homepage popping up? It's like triggering a series of dominoes in a massive, invisible chain stretching across the globe. Let's trace this path, breaking down the tech talk into everyday language.
+
+
+1. The Lookup: DNS Request
+First up, your browser needs to know where to go. Typing ‘google.com’ is like asking for directions at a tourist information booth—the DNS (Domain Name System). The DNS quickly flips through its massive directory to give you the IP address, the actual coordinates for Google on the internet map.
+
+2. Making the Connection: TCP/IP
+With the IP address in hand, your browser sends out a signal to connect with Google’s server. This uses the TCP/IP protocol, akin to dialing a phone number and waiting for the other end to pick up. There's a brief exchange ensuring both parties are ready to chat—it’s all about making a good connection.
+
+3. Checking Credentials: Firewall
+As your data heads to Google, it first passes through a firewall. Think of it as the bouncer at a club, checking IDs before letting anyone in. It makes sure your data packets are dressed appropriately and not looking to cause any trouble.
+
+4. Encrypting Your Secrets: HTTPS/SSL
+Once past the bouncer, your interaction needs protection. HTTPS and SSL work together like an invisible cloak, wrapping your data in unbreakable encryption. This ensures that your search for the nearest taco place remains your business only.
+
+5. Managing the Crowd: Load Balancer
+Google’s servers are popular, handling billions of queries. A load balancer acts like a traffic officer at a busy intersection, ensuring no single server gets overwhelmed by directing requests to the least busy server.
+
+6. The Gatekeeper: Web Server
+Your request arrives at Google’s web server, which acts like a gatekeeper. It checks what you need—if it’s just the homepage, that’s easy. But if it’s something stored deeper, like your Gmail, it calls in extra help.
+
+7. Doing the Heavy Lifting: Application Server
+For more complex requests, the application server jumps in. It’s the muscle, doing the heavy lifting of fetching data, running applications, and assembling everything you need into a neat package.
+
+8. Digging Deep: Database
+Sometimes, your request needs info from deep storage—like past searches. That’s where the database comes in. It’s a vast library, and the application server is the librarian pulling files for you.
+
+So there you have it! Typing ‘google.com’ and hitting Enter sets off a whirlwind of activity that spans the globe in the blink of an eye. It’s a daily reminder of how interconnected and streamlined our digital world has become.
