@@ -1,13 +1,60 @@
-# Open the file in vim and add the following UFW configuration:
+# /etc/ufw/before.rules
+# Initial configuration for UFW
+# These rules are processed before any user-defined rules.
 
-# First, disable UFW to apply new rules
-sudo ufw disable
+# Required setup
+*filter
+:ufw-before-input - [0:0]
+:ufw-before-output - [0:0]
+:ufw-before-forward - [0:0]
+:ufw-not-local - [0:0]
+# End of required setup
 
-# Add port forwarding rule: forward traffic from port 8080 to port 80
-sudo ufw route allow proto tcp from any to any port 8080 comment 'Forward 8080 to 80'
+# Configure port forwarding: redirect traffic from port 8080/TCP to port 80/TCP
+*nat
+:PREROUTING ACCEPT [0:0]
+-A PREROUTING -p tcp --dport 8080 -j REDIRECT --to-port 80
+COMMIT
 
-# Enable UFW again
-sudo ufw enable
+# Allow all loopback (localhost) traffic
+-A ufw-before-input -i lo -j ACCEPT
+-A ufw-before-output -o lo -j ACCEPT
 
-# Check UFW status to confirm the rule is applied
-sudo ufw status verbose
+# Allow established and related connections
+-A ufw-before-input -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A ufw-before-output -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A ufw-before-forward -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+# Drop invalid packets and log them
+-A ufw-before-input -m conntrack --ctstate INVALID -j ufw-logging-deny
+-A ufw-before-input -m conntrack --ctstate INVALID -j DROP
+
+# Allow essential ICMP types for input
+-A ufw-before-input -p icmp --icmp-type destination-unreachable -j ACCEPT
+-A ufw-before-input -p icmp --icmp-type time-exceeded -j ACCEPT
+-A ufw-before-input -p icmp --icmp-type parameter-problem -j ACCEPT
+-A ufw-before-input -p icmp --icmp-type echo-request -j ACCEPT
+
+# Allow essential ICMP types for forwarding
+-A ufw-before-forward -p icmp --icmp-type destination-unreachable -j ACCEPT
+-A ufw-before-forward -p icmp --icmp-type time-exceeded -j ACCEPT
+-A ufw-before-forward -p icmp --icmp-type parameter-problem -j ACCEPT
+-A ufw-before-forward -p icmp --icmp-type echo-request -j ACCEPT
+
+# Enable DHCP client functionality
+-A ufw-before-input -p udp --sport 67 --dport 68 -j ACCEPT
+
+# Handle non-local traffic
+-A ufw-before-input -j ufw-not-local
+-A ufw-not-local -m addrtype --dst-type LOCAL -j RETURN
+-A ufw-not-local -m addrtype --dst-type MULTICAST -j RETURN
+-A ufw-not-local -m addrtype --dst-type BROADCAST -j RETURN
+-A ufw-not-local -m limit --limit 3/min --limit-burst 10 -j ufw-logging-deny
+-A ufw-not-local -j DROP
+
+# Allow multicast DNS and UPnP for service discovery
+-A ufw-before-input -p udp -d 224.0.0.251 --dport 5353 -j ACCEPT
+-A ufw-before-input -p udp -d 239.255.255.250 --dport 1900 -j ACCEPT
+
+# Ensure the 'COMMIT' line is present for the rules to be applied
+COMMIT
