@@ -24,3 +24,6 @@ sudo ufw allow 80/tcp
 
 # Reload UFW to apply changes
 sudo ufw reload
+
+# Check UFW status
+sudo ufw status verbose
