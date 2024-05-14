@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Backup all MySQL databases and compress the output
+
+# Check if the correct number of arguments is provided
+if [ $# -ne 1 ]; then
+  echo "Usage: $0 <mysql_root_password>"
+  exit 1
+fi
+
+# Assign the first argument to PASSWORD variable
+PASSWORD=$1
+
+# Set the name of the backup file
+BACKUP_FILE="backup.sql"
+
+# Create the name of the tar.gz file based on the current date
+TAR_FILE="$(date +'%d-%m-%Y').tar.gz"
+
+# Dump all MySQL databases to the backup file
+mysqldump -u root -p"$PASSWORD" --all-databases > "$BACKUP_FILE"
+
+# Compress the backup file to tar.gz format
+tar -czvf "$TAR_FILE" "$BACKUP_FILE"
+
+# Remove the uncompressed backup file
+rm "$BACKUP_FILE"
