@@ -1,9 +1,8 @@
-# Puppet manifest to fix 500 Internal Server Error in Apache
-
+# Fix Apache 500 error by correcting Apache configuration and restarting service
 exec { 'fix-wordpress':
-  command => '/usr/bin/sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/apache2.conf',
-  path    => ['/bin', '/usr/bin'],
-  onlyif  => '/usr/bin/grep -q "AllowOverride None" /etc/apache2/apache2.conf',
+  command => 'sed -i "s/AllowOverride None/AllowOverride All/" /etc/apache2/apache2.conf',
+  path    => ['/usr/bin', '/usr/sbin', '/bin'],
+  onlyif  => 'grep -q "AllowOverride None" /etc/apache2/apache2.conf',
 }
 
 service { 'apache2':
