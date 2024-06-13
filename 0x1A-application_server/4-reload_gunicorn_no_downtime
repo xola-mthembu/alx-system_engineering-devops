@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Script to reload Gunicorn without downtime
+
+pkill -HUP gunicorn
