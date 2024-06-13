@@ -1,5 +1,6 @@
-# This Puppet manifest changes OS configuration to fix user limit issues
-
-exec { 'change-os-configuration-for-holberton-user':
-  command => 'ulimit -n 4096',
+# Update OS configuration for the holberton user
+exec { 'update-os-config-for-holberton-user':
+  command => 'sed -i "/holberton hard nofile/s/5/50000/" /etc/security/limits.conf &&
+              sed -i "/holberton soft nofile/s/4/40000/" /etc/security/limits.conf',
+  path    => '/usr/local/bin:/bin'
 }
